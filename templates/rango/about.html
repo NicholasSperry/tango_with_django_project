@@ -1,4 +1,17 @@
-<!DOCTYPE html>
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+	About
+{% endblock %}
+
+{% block body_block %}
+	<h1>This tutorial has been put together by Nicholas Sperry</h1>
+	<img src="{% static "images/pikachu.jpg" %}" alt="Picture of Pikachu" /> 
+	<img src="{{ MEDIA_URL}}cat.jpg" />
+{% endblock %}
+
+<!-- <!DOCTYPE html>
 
 {% load staticfiles %}
 
@@ -13,7 +26,7 @@
 		<div>
 			<a href="/rango/">Index</a><br />
 			<img src="{% static "images/pikachu.jpg" %}" alt="Picture of Pikachu" /> 
-			<img src="{{ MEDIA_URL}}cat.jpg" /> <!-- New line -->
+			<img src="{{ MEDIA_URL}}cat.jpg" /> 
 		</div> 
 	</body>
-</html>
+</html> -->
