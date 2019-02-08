@@ -14,19 +14,21 @@ def get_server_side_cookie(request, cookie, default_val=None):
     return val
 
 def visitor_cookie_handler(request):
-    visits = int(get_server_side_cookie("visits", "1"))
-
-    last_visit_cookie = get_server_side_cookie("last_visit", str(datetime.now()))
+    visits = int(get_server_side_cookie(request, 'visits', '1'))
+    last_visit_cookie = get_server_side_cookie(request,
+                                               'last_visit',
+                                               str(datetime.now()))
     last_visit_time = datetime.strptime(last_visit_cookie[:-7],
-                                        '%Y-%m-%d %H:%M:%S')
+                                        '%Y-%m-%d %H:%M:%S')       
 
     if (datetime.now() - last_visit_time).seconds > 0:
         visits = visits + 1
-        request.session["last_visit"] = str(datetime.now())
-    else:
-        request.session["last_visit"] = last_visit_cookie
 
-    request.session["visits"] = visits
+        request.session['last_visit'] = str(datetime.now())
+    else:
+        request.session['last_visit'] = last_visit_cookie
+
+    request.session['visits'] = visits
 
 @login_required
 def user_logout(request):
@@ -106,6 +108,7 @@ def add_category(request):
 
     return render(request, "rango/add_category.html", {"form": form})
 
+@login_required
 def add_page(request, category_name_slug):
     try:
         category = Category.objects.get(slug = category_name_slug)
@@ -150,15 +153,14 @@ def show_category(request, category_name_slug):
 
 def index(request):
     request.session.set_test_cookie()
-    
-    category_list = Category.objects.order_by("-likes")[:5]
-    page_list = Page.objects.order_by("-views")[:5]
-    context_dict = {"categories": category_list, "pages": page_list}
+    category_list = Category.objects.order_by('-likes')[:5]
+    page_list = Page.objects.order_by('-views')[:5]
+    context_dict = {'categories': category_list, 'pages': page_list}
 
     visitor_cookie_handler(request)
-    context_dict["visits"] = request.session["visits"]
+    context_dict['visits'] = request.session['visits']
 
-    response = render(request, "rango/index.html", context=context_dict)
+    response = render(request, 'rango/index.html', context=context_dict)
     return response
 
 def about(request):
